@@ -10,9 +10,10 @@ const LandingPage: React.FC = () => {
         <Link to="/chat">
           <button className="btn btn-primary">Join Group Chat</button>
         </Link>
-        <Link to="/feature">
-          <button className="btn btn-secondary">Other Feature</button>
+        <Link to="/profile">
+          <button className="btn btn-secondary">Profile</button>
         </Link>
+        
       </div>
 
     </div>

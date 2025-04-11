@@ -1,36 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import io, { Socket } from 'socket.io-client';
+import { Link } from 'react-router-dom';
 
-// Establish a connection to the server
-const socket = io('http://localhost:3001');
-
-const ChatMatchPage: React.FC = () => {
+const ChatPage: React.FC = () => {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState<string[]>([]);
+  const socketRef = useRef<Socket | null>(null);
 
-  // Function to send a message
-  const sendMessage = () => {
-    socket.emit('send_message', { text: message });
-    setChat(prev => [...prev, `Me: ${message}`]);
-    setMessage('');
-  };
-
-  // Listen for messages
   useEffect(() => {
-    socket.on('receive_message', (data: { text: string }) => {
+    // Establish the connection when the component mounts:
+    socketRef.current = io('http://localhost:3001');
+    console.log('Socket connected');
+
+    // Set up a listener for incoming messages:
+    socketRef.current.on('receive_message', (data: { text: string }) => {
       setChat(prev => [...prev, `Stranger: ${data.text}`]);
     });
-    // Cleanup on unmount
+
+    // Cleanup: disconnect the socket when the component unmounts:
     return () => {
-      socket.off('receive_message');
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        console.log('Socket disconnected');
+      }
     };
   }, []);
 
-  return (
-    <div className='p-10 min-h-screen'>
+  const sendMessage = () => {
+    if (socketRef.current) {
+      socketRef.current.emit('send_message', { text: message });
+      setChat(prev => [...prev, `Me: ${message}`]);
+      setMessage('');
+    }
+  };
 
-      <h1 className="text-xl font-bold mb-4 " >Group Chat</h1>
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">Group Chat</h1>
       <div className="my-4 p-2 border h-64 overflow-auto">
         {chat.map((msg, index) => (
           <div key={index}>{msg}</div>
@@ -47,16 +53,18 @@ const ChatMatchPage: React.FC = () => {
           Send
         </button>
       </div>
+
       <br /><br />
 
-    <div className='flex justify-center'>
-        <Link to="/">
-            <button className="btn btn-primary">Return Home</button>
-        </Link>
-    </div>
+      <div className='flex justify-center'>
+          <Link to="/">
+              <button className="btn btn-primary">Return Home</button>
+          </Link>
+      </div>
 
     </div>
   );
 };
 
-export default ChatMatchPage;
+export default ChatPage;
+

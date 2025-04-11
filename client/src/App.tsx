@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import ChatMatchPage from './chatMatch';
-import LandingPage from './landingPage';
-import ProfilePage from './profilePage';
+import ChatMatchPage from './app/chat-match/chatMatch';
+import LandingPage from './app/home/landingPage';
+import ProfilePage from './app/profile/profilePage';
 
 const App: React.FC = () => {
   return (

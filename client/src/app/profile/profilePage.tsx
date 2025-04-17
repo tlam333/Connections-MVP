@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { interestCategories, InterestCategory } from '../../data/interestCategories';
+import { Link } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
   // Local state for user profile
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
+  const [description, setDescription] = useState('');
+
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
@@ -41,8 +44,8 @@ const ProfilePage: React.FC = () => {
       alert("Name and age fields cannot be empty.");
       return;
     }
-  
-    const profile = { name, age, interests: selectedInterests };
+
+    const profile = { name, age, description, interests: selectedInterests };
     console.log("Profile saved:", profile);
     alert("Profile saved! Check your console or localStorage.");
   };
@@ -54,7 +57,7 @@ const ProfilePage: React.FC = () => {
       
       {/* Name Field */}
       <div className="mb-4">
-        <label className="block mb-1">Name</label>
+        <label className="block mb-1">Name:</label>
         <input 
           type="text"
           value={name}
@@ -65,7 +68,7 @@ const ProfilePage: React.FC = () => {
       
       {/* Age Field */}
       <div className="mb-4">
-        <label className="block mb-1">Age</label>
+        <label className="block mb-1">Age:</label>
         <input 
           type="number"
           value={age}
@@ -73,10 +76,21 @@ const ProfilePage: React.FC = () => {
           className="input input-bordered w-full"
         />
       </div>
+
+      {/* Description Field */}
+      <div className="mb-4">
+        <label className="block mb-1">Description:<br /> ( Tell people what type of conversations your into! )</label>
+        <textarea
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          className="textarea textarea-bordered w-full h-32 resize-none overflow-y-auto"
+        />
+
+      </div>
       
       {/* Interest Selection */}
       <div className="mb-4">
-        <label className="block mb-1">Select Interests</label>
+        <label className="block mb-1">Select Interests:</label>
         <div className="space-y-4">
           {interestCategories.map((cat: InterestCategory) => (
             <div key={cat.category} className="border p-2 rounded">
@@ -131,6 +145,16 @@ const ProfilePage: React.FC = () => {
       <button className="btn btn-primary w-full" onClick={saveProfile}>
         Save Profile
       </button>
+          <br /><br />
+      <div className="flex space-x-4 justify-center">
+        <Link to="/chat">
+          <button className="btn btn-primary">Join Group Chat</button>
+        </Link>
+        <Link to="/">
+          <button className="btn btn-secondary">Home</button>
+        </Link>
+        
+      </div>
     </div>
   );
 };

@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -12,7 +15,7 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(cors(), express.json());
-connectDB(process.env.MONGO_URI!);
+connectDB('mongodb+srv://tlam333:Greenunderwear1@connectionsapp.1yboyqa.mongodb.net/?retryWrites=true&w=majority&appName=ConnectionsApp');
 
 app.use(profileRoutes);
 

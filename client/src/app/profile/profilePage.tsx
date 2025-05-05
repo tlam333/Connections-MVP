@@ -39,15 +39,42 @@ const ProfilePage: React.FC = () => {
   };
 
   // Save profile data (for now: just log it).
-  const saveProfile = () => {
+  const saveProfile = async () => {
     if (!name.trim() || !age.trim()) {
       alert("Name and age fields cannot be empty.");
       return;
     }
 
-    const profile = { name, age, description, interests: selectedInterests };
-    console.log("Profile saved:", profile);
-    alert("Profile saved! Check your console or localStorage.");
+    try {
+      const res = await fetch('http://localhost:3001/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({
+          username: name.toLowerCase().replace(/\s+/g, ''), // temp username logic
+          name,
+          age: Number(age),
+          description,
+          interests: selectedInterests
+        })
+      });
+
+      const data = await res.json();
+
+      if(!res.ok){
+        alert("Error: " + (data.error || "Something went wrong."));
+        return;
+      }
+
+      console.log("Saved user:", data);
+      alert("Profile saved successfully!");
+    } catch (error) {
+      console.error("Profile save error:", error);
+      alert("Server error.");
+    }
+
+
   };
   
 

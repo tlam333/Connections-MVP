@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
   // Local state for user profile
+  const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [description, setDescription] = useState('');
@@ -40,7 +41,7 @@ const ProfilePage: React.FC = () => {
 
   // Save profile data (for now: just log it).
   const saveProfile = async () => {
-    if (!name.trim() || !age.trim()) {
+    if (!name.trim() || !password.trim() || !age.trim()) {
       alert("Name and age fields cannot be empty.");
       return;
     }
@@ -53,6 +54,7 @@ const ProfilePage: React.FC = () => {
         },
         body: JSON.stringify({
           username: name.toLowerCase().replace(/\s+/g, ''), // temp username logic
+          password,
           name,
           age: Number(age),
           description,
@@ -89,6 +91,17 @@ const ProfilePage: React.FC = () => {
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
+          className="input input-bordered w-full"
+        />
+      </div>
+
+      {/* Password Field */}
+      <div className="mb-4">
+        <label className="block mb-1">Password:</label>
+        <input 
+          type="text"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
           className="input input-bordered w-full"
         />
       </div>

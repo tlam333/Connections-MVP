@@ -1,5 +1,6 @@
 import { Router, RequestHandler } from 'express';
 import User, { IUser } from '../models/user';
+import bcrypt from 'bcrypt';
 
 const router = Router();
 
@@ -20,9 +21,11 @@ const profileRoutes: RequestHandler<
     //   return res.status(409).json({ error: 'Username already taken.' });
     // }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       username,
-      password,
+      password: hashedPassword,
       name,
       age,
       description,

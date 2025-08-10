@@ -1,2 +1,2 @@
 # Connections-MVP
-Simple MVP for a Social Media Platform
+Testing websockets, in development
